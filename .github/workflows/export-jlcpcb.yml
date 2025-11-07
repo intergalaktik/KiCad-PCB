@@ -12,7 +12,7 @@ jobs:
   build:
     name: Generate fabrication and assembly files
     runs-on: ubuntu-latest
-    container: ghcr.io/inti-cmnb/kicad9_auto_full:latest
+    container: ghcr.io/inti-cmnb/kicad9_auto_full:dev
 
     steps:
       - name: Checkout repository
@@ -23,7 +23,6 @@ jobs:
       - name: Check KiCad version
         run: |
           kicad-cli --version
-          pcbnew --version
 
       - name: Run KiBot (Gerbers, BOM, CPL, PDF, 3D)
         uses: INTI-CMNB/KiBot@v2
