@@ -10,8 +10,9 @@ permissions:
 
 jobs:
   build:
-    name: Generate fabrication files
+    name: Generate fabrication and assembly files
     runs-on: ubuntu-latest
+    container: ghcr.io/inti-cmnb/kicad9_auto:latest  # Use KiCad 9 image
 
     steps:
       - name: Checkout repository
