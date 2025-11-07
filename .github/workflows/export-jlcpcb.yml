@@ -54,8 +54,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-          production/Fabrication/JLCPCB/intergalaktik-JLCPCB.zip
+          files: production/Fabrication/JLCPCB/intergalaktik-JLCPCB.zip
           production/Fabrication/PDFs/intergalaktik-schematic.pdf
           production/Fabrication/ibom/intergalaktik-ibom.html
         env:
