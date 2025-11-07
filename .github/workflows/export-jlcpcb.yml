@@ -26,7 +26,7 @@ jobs:
         run: |
           kicad-cli --version
 
-      - name: Run KiBot (Gerbers, BOM, CPL, PDF, 3D)
+      - name: Run KiBot (Gerbers, iBOM, PDF)
         uses: INTI-CMNB/KiBot@dev
         with:
           config: hardware/output.kibot.yaml
@@ -51,14 +51,12 @@ jobs:
             echo "No changes to commit."
           fi
 
-      - name: Create release archive
-        run: |
-          mkdir -p artifacts
-          zip -r artifacts/jlcpcb_production.zip production/
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/jlcpcb_production.zip
+          files: |
+          production/Fabrication/JLCPCB/intergalaktik-JLCPCB.zip
+          production/Fabrication/PDFs/intergalaktik-schematic.pdf
+          production/Fabrication/ibom/intergalaktik-ibom.html
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
