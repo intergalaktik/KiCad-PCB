@@ -25,7 +25,7 @@ jobs:
           kicad-cli --version
 
       - name: Run KiBot (Gerbers, BOM, CPL, PDF, 3D)
-        uses: INTI-CMNB/KiBot@v2
+        uses: INTI-CMNB/KiBot@dev
         with:
           config: hardware/output.kibot.yaml
           board: 'hardware/intergalaktik.kicad_pcb'
