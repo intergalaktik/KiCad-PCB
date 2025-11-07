@@ -22,9 +22,9 @@ jobs:
       - name: Run KiBot (Gerbers, BOM, CPL, PDF, 3D)
         uses: INTI-CMNB/KiBot@v2
         with:
-          config: output.kibot.yaml
-          board: 'hardware/*.kicad_pcb'
-          schema: 'hardware/*.kicad_sch'
+          config: hardware/output.kibot.yaml
+          board: 'hardware/intergalaktik.kicad_pcb'
+          schema: 'hardware/intergalaktik.kicad_sch'
           dir: production
           install3D: true
           verbose: true
