@@ -19,31 +19,30 @@ jobs:
         with:
           fetch-depth: 0  # needed for pushing back changes
 
-      - name: Set up KiCad + KiBot
+      - name: Run KiBot (Gerbers, BOM, CPL, PDF, 3D)
         uses: INTI-CMNB/KiBot@v2
         with:
-          kibot_config: output.kibot.yaml
-          schema: 'hardware/*.kicad_sch'
+          config: output.kibot.yaml
           board: 'hardware/*.kicad_pcb'
+          schema: 'hardware/*.kicad_sch'
           dir: production
-          install_3d: true
-          install_pdf: true
-
-      - name: Generate PDF schematics
-        run: |
-          kibot -c output.kibot.yaml -s hardware/intergalaktik.kicad_sch -b hardware/intergalaktik.kicad_pcb --pdf_sch
-
-      - name: Generate 3D render
-        run: |
-          kibot -c output.kibot.yaml -s hardware/intergalaktik.kicad_sch -b hardware/intergalaktik.kicad_pcb --3d
+          install3D: true
+          verbose: true
 
       - name: Commit generated files to production folder
+        if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add production/*
-          git commit -m "Update production files [skip ci]" || echo "No changes to commit"
-          git push origin main
+
+          # Prevent infinite CI loops (skip workflow on commit)
+          if [ -n "$(git status --porcelain production)" ]; then
+            git add production/
+            git commit -m "Update production files [skip ci]"
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi
 
       - name: Create release archive
         run: |
@@ -55,7 +54,7 @@ jobs:
         with:
           tag_name: "auto-${{ github.run_number }}"
           name: "Automated JLCPCB Export #${{ github.run_number }}"
-          body: "Automatically generated fabrication, assembly, and documentation files."
+          body: "Automatically generated fabrication, assembly, PDF, and 3D documentation files."
           files: artifacts/jlcpcb_production.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
