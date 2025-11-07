@@ -1,0 +1,61 @@
+name: Export JLCPCB Production Files
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write  # Allow pushing and creating releases
+
+jobs:
+  build:
+    name: Generate fabrication files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed for pushing back changes
+
+      - name: Set up KiCad + KiBot
+        uses: INTI-CMNB/KiBot@v2
+        with:
+          kibot_config: output.kibot.yaml
+          schema: 'hardware/*.kicad_sch'
+          board: 'hardware/*.kicad_pcb'
+          dir: production
+          install_3d: true
+          install_pdf: true
+
+      - name: Generate PDF schematics
+        run: |
+          kibot -c output.kibot.yaml -s hardware/intergalaktik.kicad_sch -b hardware/intergalaktik.kicad_pcb --pdf_sch
+
+      - name: Generate 3D render
+        run: |
+          kibot -c output.kibot.yaml -s hardware/intergalaktik.kicad_sch -b hardware/intergalaktik.kicad_pcb --3d
+
+      - name: Commit generated files to production folder
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add production/*
+          git commit -m "Update production files [skip ci]" || echo "No changes to commit"
+          git push origin main
+
+      - name: Create release archive
+        run: |
+          mkdir -p artifacts
+          zip -r artifacts/jlcpcb_production.zip production/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "auto-${{ github.run_number }}"
+          name: "Automated JLCPCB Export #${{ github.run_number }}"
+          body: "Automatically generated fabrication, assembly, and documentation files."
+          files: artifacts/jlcpcb_production.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
