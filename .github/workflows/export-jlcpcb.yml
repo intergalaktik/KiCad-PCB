@@ -49,6 +49,9 @@ jobs:
             echo "No changes to commit."
           fi
 
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
+
       - name: Create release archive
         run: |
           mkdir -p artifacts
