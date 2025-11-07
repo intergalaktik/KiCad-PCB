@@ -55,7 +55,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: production/Fabrication/JLCPCB/intergalaktik-JLCPCB.zip
-          production/Fabrication/PDFs/intergalaktik-schematic.pdf
-          production/Fabrication/ibom/intergalaktik-ibom.html
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
