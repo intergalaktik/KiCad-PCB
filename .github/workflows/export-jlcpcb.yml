@@ -3,7 +3,9 @@ name: Export JLCPCB Production Files
 on:
   push:
     branches:
-      - main
+      - main    
+    tags:
+      - "v*.*.*"    
 
 permissions:
   contents: write  # Allow pushing and creating releases
@@ -60,9 +62,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "auto-${{ github.run_number }}"
-          name: "Automated JLCPCB Export #${{ github.run_number }}"
-          body: "Automatically generated fabrication, assembly, PDF, and 3D documentation files."
           files: artifacts/jlcpcb_production.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
