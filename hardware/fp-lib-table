@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "intergalaktik")(type "KiCad")(uri "${KIPRJMOD}/footprints/intergalaktik")(options "")(descr ""))
+  (lib (name "radiona")(type "KiCad")(uri "${KIPRJMOD}/footprints/radiona.pretty")(options "")(descr ""))
+)
